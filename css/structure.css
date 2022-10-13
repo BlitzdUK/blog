@@ -23,17 +23,17 @@ pre {
   padding: 8px !important;
   border: 1px solid #efefef !important;
   border-radius: 4px !important;
-  background: transparent !important;
+  background: #375bfa !important;
 }
 
 code {
   padding: 4px;
   border-radius: 4px;
-  background: #fafafa;
+  background: #375bfa;
 }
 
 pre>code {
-  background: transparent;
+  background: #375bfa;
 }
 
 .header {
