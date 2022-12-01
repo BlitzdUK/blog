@@ -1,129 +1,111 @@
-<html>
-  <head>
-    <title>Issuance</title>
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Blog page concept with cursor image on hover</title>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="section padding-top-big padding-bottom over-hide">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 section-title-wrap text-center parallax-fade-top">
+						<p class="primary-color">stories</p>	
+						<h1>a place full<br>of stuff</h1>
+					</div>
+				</div>	
+			</div>
+		</div>
 
-    <link rel="stylesheet" type="text/css" href="css/structure.css">
-    <link rel="stylesheet" type="text/css" href="css/typography.css">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=PT+Serif">
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+		<div class="section padding-bottom-big over-hide">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 text-center mb-3" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-1">
+							<div class="blog-post-box">
+								<h5>We want to share with you our mood after selection.</h5>
+								<p class="mb-0 mt-3">october 27, 2018</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-12 text-center mt-5 mb-3" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-2">
+							<div class="blog-post-box">
+								<h5>Sleep, code, eat, travel. Repeat.</h5>
+								<p class="mb-0 mt-3">october 24, 2018</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-12 text-center mt-5 mb-3" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-3">
+							<div class="blog-post-box">
+								<h5>Don’t get lost quoting your next projects.</h5>
+								<p class="mb-0 mt-3">october 22, 2018</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-12 text-center mt-5 mb-3" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-4">
+							<div class="blog-post-box">
+								<h5>Don´t give up, keep on focus.</h5>
+								<p class="mb-0 mt-3">october 19, 2018</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-12 text-center mt-5 mb-3" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-5">
+							<div class="blog-post-box">
+								<h5>Moments from a life. Day of photography.</h5>
+								<p class="mb-0 mt-3">october 15, 2018</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-12 text-center mt-5 mb-3" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-6">
+							<div class="blog-post-box">
+								<h5>How you look at it is pretty much how you'll see it.</h5>
+								<p class="mb-0 mt-3">october 12, 2018</p>
+							</div>
+						</a>
+					</div>
+					<div class="col-12 text-center mt-5" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+						<a href="#" class="cursor-link-blog-post-7">
+							<div class="blog-post-box">
+								<h5>Don´t give up, keep on focus.</h5>
+								<p class="mb-0 mt-3">october 09, 2018</p>
+							</div>
+						</a>
+					</div>
+				</div>	
+			</div>
+		</div>
 
-    <script type="module">
-      import { React, ReactDOM } from 'https://unpkg.com/es-react@16.12.0/dev';
-      import htm from 'https://unpkg.com/htm?module'
-      import { endpoint } from 'https://cdn.skypack.dev/@octokit/endpoint';
-      import marked from 'https://unpkg.com/marked@0.8.0/lib/marked.esm.js';
+		<div class="section padding-top-bottom over-hide background-dark">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 text-center" data-scroll-reveal="enter bottom move 30px over 0.5s after 0.2s">
+            <a href="#" class="blog-nav cursor-link">older news</a>
+					</div>
+				</div>	
+			</div>
+		</div>
+	
+	<!-- Page cursor
+	================================================== -->
+	
+	<div class="cursor cursor-shadow"></div>
+	<div class="cursor cursor-dot"></div>
+	
+	<!-- Link to page
+	================================================== -->
 
-      const html = htm.bind(React.createElement)
+  <a href="https://themeforest.net/user/ig_design/portfolio"      class="link-to-portfolio cursor-link" target=”_blank”       ></a>
+<!-- partial -->
+  <script src='https://code.jquery.com/jquery-2.2.2.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js'></script><script  src="./script.js"></script>
 
-      const Header = (props) => {
-        return html`
-          <div className="header">
-            <h1 className="title">
-              <a href="index.html"><strong>issuance</strong></a>
-            </h1>
-            <p className="description">
-              Open, free blogging on <strong>Github pages</strong> with <strong>Github issues</strong>.
-            </p>
-          </div>
-        `;
-      }
-
-      const Posts = (props) => {
-        const [issues, setIssues] = React.useState();
-
-        React.useEffect(() => {
-          async function fetchIssues() {
-            if (!issues) {
-              const { url, ...options } = endpoint("GET /repos/:owner/:repo/issues", {
-                owner: "BlitzdUK",
-                repo: "blog",
-                auth: 'x'
-              });
-              const res = await fetch(url, options);
-              setIssues(await res.json());
-            }
-          }
-
-          fetchIssues();
-        }, [issues]);
-
-        const {
-          search,
-        } = window.location;
-
-        return html`
-          <div className="posts">
-            ${(issues || [])
-              .filter(({ user }) => user.login === 'BlitzdUK')
-              .filter(({ number }) => !search || Number(search.slice(1)) === number)
-              .map(({
-                number,
-                title,
-                labels,
-                user,
-                created_at,
-                comments,
-                body,
-              }) => html`
-                <div
-                  className="post"
-                  id={${number}}
-                  key={${number}}
-                >
-                  <h1 className="title">
-                    <a href="?${number}">
-                      ${title}
-                    </a>
-                  </h1>
-                  ${labels.length > 0 && html`
-                    <div className="categories">
-                      in
-                      ${labels.map((label) => html`
-                        <span
-                          key="${label.id}"
-                          style=${{ color: '#' + label.color, padding: '0 .25em' }}
-                        >
-                          ${label.name}
-                        </span>
-                      `)}
-                    </div>
-                  `}
-                  <div className="meta">
-                    <span>by </span>
-                    <a href="${user.html_url}">${user.login}</a>
-                    <span>, </span>
-                    <span>${new Date(created_at).toLocaleDateString()} </span>
-                    ${comments
-                      ? html`
-                        <a href="?${number}">
-                          ${comments} comment(s)
-                        </a>
-                      `
-                      : null
-                    }
-                  </div>
-                  <div
-                    className="body"
-                    dangerouslySetInnerHTML="${{ __html: marked(body).replace(/<pre>/g, '<pre class="prettyprint">')}}"
-                  />
-                </div>
-              `)}
-          </div>
-        `
-      }
-
-      ReactDOM.render(
-        html`
-          <${Header} />
-          <${Posts} />
-        `,
-        document.querySelector('#issuance')
-      )
-    </script>
-  </head>
-  <body>
-    <div id="issuance" />
-  </body>
+</body>
 </html>
