@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Github Issues</title>
+  <style>
+    #container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+  </style>
 </head>
 <body>
-  <h1>Github Issues</h1>
-  <div id="issues"></div>
+  <div id="container"></div>
 
   <script>
-    // Fetch JSON data from the API
-    fetch('https://api.github.com/repos/BlitzdUK/blog/issues')
+    // Fetch JSON data from the GitHub API
+    fetch("https://api.github.com/repos/BlitzdUK/blog/issues")
       .then(response => response.json())
       .then(data => {
-        // Get the 'issues' container
-        const issuesContainer = document.getElementById('issues');
+        // Create a div to hold the JSON data
+        const container = document.getElementById("container");
 
-        // Iterate over the issues
+        // Loop through each issue and display the title, message, and time
         data.forEach(issue => {
-          // Create elements for the title, message, and time
-          const titleElement = document.createElement('h2');
-          const messageElement = document.createElement('p');
-          const timeElement = document.createElement('p');
+          const title = document.createElement("h2");
+          title.textContent = issue.title;
 
-          // Set the content of the elements
-          titleElement.textContent = issue.title;
-          messageElement.textContent = issue.body;
-          timeElement.textContent = issue.created_at;
+          const message = document.createElement("p");
+          message.textContent = issue.body;
 
-          // Append the elements to the container
-          issuesContainer.appendChild(titleElement);
-          issuesContainer.appendChild(messageElement);
-          issuesContainer.appendChild(timeElement);
+          const time = document.createElement("p");
+          time.textContent = issue.created_at;
+
+          container.appendChild(title);
+          container.appendChild(message);
+          container.appendChild(time);
         });
-      })
-      .catch(error => {
-        console.error('Error:', error);
       });
   </script>
 </body>
