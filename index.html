@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>Blitzd Media | Blog</title>
+    <title>Issuance</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,7 +23,7 @@
         return html`
           <div className="header">
             <h1 className="title">
-              <a href="index.html"><strong>Blitzd Media Blog</strong></a>
+              <a href="index.html"><strong>issuance</strong></a>
             </h1>
             <p className="description">
               Open, free blogging on <strong>Github pages</strong> with <strong>Github issues</strong>.
@@ -39,7 +39,7 @@
           async function fetchIssues() {
             if (!issues) {
               const { url, ...options } = endpoint("GET /repos/:owner/:repo/issues", {
-                owner: "BlitzdUK",
+                owner: "blitzduk",
                 repo: "blog",
                 auth: 'x'
               });
@@ -58,7 +58,7 @@
         return html`
           <div className="posts">
             ${(issues || [])
-              .filter(({ user }) => user.login === 'BlitzdUK')
+              .filter(({ user }) => user.login === 'mateogianolio')
               .filter(({ number }) => !search || Number(search.slice(1)) === number)
               .map(({
                 number,
