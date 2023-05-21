@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GitHub Issues</title>
+  <title>Github Issues</title>
 </head>
 <body>
-  <h1>GitHub Issues</h1>
+  <h1>Github Issues</h1>
   <div id="issues"></div>
 
   <script>
-    // Fetch data from GitHub API
+    // Fetch JSON data from the API
     fetch('https://api.github.com/repos/BlitzdUK/blog/issues')
       .then(response => response.json())
       .then(data => {
-        // Manipulate the HTML DOM to display the data
+        // Get the 'issues' container
         const issuesContainer = document.getElementById('issues');
 
-        // Iterate over each issue and create a list item for it
+        // Iterate over the issues
         data.forEach(issue => {
-          const listItem = document.createElement('li');
-          listItem.textContent = issue.title;
-          issuesContainer.appendChild(listItem);
+          // Create elements for the title, message, and time
+          const titleElement = document.createElement('h2');
+          const messageElement = document.createElement('p');
+          const timeElement = document.createElement('p');
+
+          // Set the content of the elements
+          titleElement.textContent = issue.title;
+          messageElement.textContent = issue.body;
+          timeElement.textContent = issue.created_at;
+
+          // Append the elements to the container
+          issuesContainer.appendChild(titleElement);
+          issuesContainer.appendChild(messageElement);
+          issuesContainer.appendChild(timeElement);
         });
       })
       .catch(error => {
-        console.log('Error:', error);
+        console.error('Error:', error);
       });
   </script>
 </body>
