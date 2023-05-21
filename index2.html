@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GitHub Issues</title>
+</head>
+<body>
+  <h1>GitHub Issues</h1>
+  <div id="issues"></div>
+
+  <script>
+    // Fetch data from GitHub API
+    fetch('https://api.github.com/repos/BlitzdUK/blog/issues')
+      .then(response => response.json())
+      .then(data => {
+        // Manipulate the HTML DOM to display the data
+        const issuesContainer = document.getElementById('issues');
+
+        // Iterate over each issue and create a list item for it
+        data.forEach(issue => {
+          const listItem = document.createElement('li');
+          listItem.textContent = issue.title;
+          issuesContainer.appendChild(listItem);
+        });
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      });
+  </script>
+</body>
+</html>
