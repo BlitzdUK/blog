@@ -60,18 +60,19 @@
           titleElement.classList.add('post-title');
           titleElement.textContent = post.title;
 
-          const timestampElement = document.createElement('div');
-          timestampElement.classList.add('post-timestamp');
-          timestampElement.textContent = formatTimestamp(post.created_at);
 
           const bodyElement = document.createElement('div');
           bodyElement.classList.add('post-body');
           bodyElement.textContent = post.body;
+		  
+		  
+		  const timestampElement = document.createElement('div');
+          timestampElement.classList.add('post-timestamp');
+          timestampElement.textContent = formatTimestamp(post.created_at);
 
           postElement.appendChild(titleElement);
-          postElement.appendChild(timestampElement);
           postElement.appendChild(bodyElement);
-
+		  postElement.appendChild(timestampElement);
           postsContainer.appendChild(postElement);
         });
       })
