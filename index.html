@@ -1,131 +1,83 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Issuance</title>
+<head>
+  <title>GitHub Issues</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    h1 {
+      text-align: center;
+    }
 
-    <link rel="stylesheet" type="text/css" href="css/structure.css">
-    <link rel="stylesheet" type="text/css" href="css/typography.css">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=PT+Serif">
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    .post {
+      margin-bottom: 20px;
+    }
 
-    <script type="module">
-      import { React, ReactDOM } from 'https://unpkg.com/es-react@16.12.0/dev';
-      import htm from 'https://unpkg.com/htm?module'
-      import { endpoint } from 'https://cdn.skypack.dev/@octokit/endpoint';
-      import marked from 'https://unpkg.com/marked@0.8.0/lib/marked.esm.js';
+    .post-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-      const html = htm.bind(React.createElement)
+    .post-timestamp {
+      font-size: 12px;
+      color: #666;
+    }
 
-      const Header = (props) => {
-        return html`
-          <div className="header">
-            <h1 className="title">
-              <a href="index.html"><strong>issuance</strong></a>
-            </h1>
-            <p className="description">
-              Open, free blogging on <strong>Github pages</strong> with <strong>Github issues</strong>.
-            </p>
-          </div>
-        `;
-      }
+    .post-body {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>GitHub Issues</h1>
 
-      const Posts = (props) => {
-        const [issues, setIssues] = React.useState();
+  <div id="posts"></div>
 
-        React.useEffect(() => {
-          async function fetchIssues() {
-            if (!issues) {
-              const { url, ...options } = endpoint("GET /repos/:owner/:repo/issues", {
-                owner: "blitzduk",
-                repo: "blog",
-                auth: 'x'
-              });
-              const res = await fetch(url, options);
-              setIssues(await res.json());
-            }
-          }
+  <script>
+    function formatTimestamp(timestamp) {
+      const date = new Date(timestamp);
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${hours}:${minutes}:${seconds} ${day}-${month}-${year}`;
+    }
 
-          fetchIssues();
-        }, [issues]);
+    fetch('https://api.github.com/repos/BlitzdUK/blog/issues')
+      .then(response => response.json())
+      .then(data => {
+        const postsContainer = document.getElementById('posts');
+        data.forEach(post => {
+          const postElement = document.createElement('div');
+          postElement.classList.add('post');
 
-        const {
-          search,
-        } = window.location;
+          const titleElement = document.createElement('div');
+          titleElement.classList.add('post-title');
+          titleElement.textContent = post.title;
 
-        return html`
-          <div className="posts">
-            ${(issues || [])
-              .filter(({ user }) => user.login === 'blitzduk')
-              .filter(({ number }) => !search || Number(search.slice(1)) === number)
-              .map(({
-                number,
-                title,
-                labels,
-                user,
-                created_at,
-                comments,
-                body,
-              }) => html`
-                <div
-                  className="post"
-                  id={${number}}
-                  key={${number}}
-                >
-                  <h1 className="title">
-                    <a href="?${number}">
-                      ${title}
-                    </a>
-                  </h1>
-                  ${labels.length > 0 && html`
-                    <div className="categories">
-                      in
-                      ${labels.map((label) => html`
-                        <span
-                          key="${label.id}"
-                          style=${{ color: '#' + label.color, padding: '0 .25em' }}
-                        >
-                          ${label.name}
-                        </span>
-                      `)}
-                    </div>
-                  `}
-                  <div className="meta">
-                    <span>by </span>
-                    <a href="${user.html_url}">${user.login}</a>
-                    <span>, </span>
-                    <span>${new Date(created_at).toLocaleDateString()} </span>
-                    ${comments
-                      ? html`
-                        <a href="?${number}">
-                          ${comments} comment(s)
-                        </a>
-                      `
-                      : null
-                    }
-                  </div>
-                  <div
-                    className="body"
-                    dangerouslySetInnerHTML="${{ __html: marked(body).replace(/<pre>/g, '<pre class="prettyprint">')}}"
-                  />
-                </div>
-              `)}
-          </div>
-        `
-      }
+          const timestampElement = document.createElement('div');
+          timestampElement.classList.add('post-timestamp');
+          timestampElement.textContent = formatTimestamp(post.created_at);
 
-      ReactDOM.render(
-        html`
-          <${Header} />
-          <${Posts} />
-        `,
-        document.querySelector('#issuance')
-      )
-    </script>
-  </head>
-  <body>
-    <div id="issuance" />
-  </body>
+          const bodyElement = document.createElement('div');
+          bodyElement.classList.add('post-body');
+          bodyElement.textContent = post.body;
+
+          postElement.appendChild(titleElement);
+          postElement.appendChild(timestampElement);
+          postElement.appendChild(bodyElement);
+
+          postsContainer.appendChild(postElement);
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  </script>
+</body>
 </html>
