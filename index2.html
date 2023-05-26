@@ -3,12 +3,10 @@
 <head>
   <style>
     #container {
-      display: flex;
       justify-content: center;
       align-items: center;
       background: black;
       color:  red;
-      height: 100vh;
       flex-direction: column;
     }
   </style>
@@ -41,62 +39,5 @@
         });
       });
   </script>
-  <script>
-  fetch('https://api.ipify.org?format=json')
-  .then(response => response.json())
-  .then(data => {
-    const ipAddress = data.ip;
-    // Use the ipAddress as needed
-    console.log(ipAddress);
-  })
-  .catch(error => {
-    console.log('Error:', error);
-  });
-
-const referer = document.referrer;
-// Use the referer as needed
-console.log(referer);
-
-if ("geolocation" in navigator) {
-  navigator.geolocation.getCurrentPosition(position => {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    // Use latitude and longitude as needed
-    console.log(latitude, longitude);
-  }, error => {
-    console.log('Error:', error);
-  });
-} else {
-  console.log('Geolocation is not supported');
-}
-
-const url = 'https://dev.blitzd.uk:1880/post/sitedata';
-const data = {
-  ip: ipAddress, // Replace with the actual IP address variable
-  referer: referer, // Replace with the actual referer variable
-  latitude: latitude, // Replace with the actual latitude variable
-  longitude: longitude // Replace with the actual longitude variable
-};
-
-fetch(url, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(data)
-})
-  .then(response => {
-    if (response.ok) {
-      console.log('IP address posted successfully');
-    } else {
-      console.log('Error:', response.status);
-    }
-  })
-  .catch(error => {
-    console.log('Error:', error);
-  });
-
-
-</script>
 </body>
 </html>
