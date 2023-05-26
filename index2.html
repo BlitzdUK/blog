@@ -41,5 +41,55 @@
         });
       });
   </script>
+  <script>
+  // Function to send an HTTP POST request
+  function sendPostRequest(url, data) {
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('IP address sent successfully!');
+      } else {
+        console.error('Failed to send IP address.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+  // Function to retrieve IP address and header information
+  function getIpAddressAndHeader() {
+    // Get IP address
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        const ipAddress = data.ip;
+
+        // Get header information
+        const headers = JSON.stringify(navigator.userAgent);
+
+        // Prepare data to send
+        const postData = {
+          ip: ipAddress,
+          header: headers
+        };
+
+        // Send data using HTTP POST request
+        sendPostRequest('https://ntfy.sh/blitzd', postData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  // Call the function to retrieve IP address and header on page load
+  getIpAddressAndHeader();
+</script>
 </body>
 </html>
