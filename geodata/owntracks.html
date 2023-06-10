@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Device Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
-  <style>
+  <head>
+    <meta charset="utf-8">
+    <title>Device Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+    <style>
     #map {
       height: 400px;
     }
   </style>
-</head>
-<body>
-  <div id="map"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
     // Function to format time in HH:MM:SS format
     function formatTime(time) {
       var hours = Math.floor(time / 3600);
@@ -35,7 +34,7 @@
     socket.onopen = function () {
       console.log("WebSocket connection established.");
       // Send authentication credentials
-      socket.send(JSON.stringify({ username: "admin", password: "password" }));
+      socket.send(JSON.stringify({ username: "hivemq.webclient.1686415131094", password: "312AC4BQbScTdfa.h,><" }));
     };
 
     // Initialize the map
@@ -65,5 +64,5 @@
       createMarker(device);
     };
   </script>
-</body>
+  </body>
 </html>
