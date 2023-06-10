@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Device Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    // Function to format time in HH:MM:SS format
+    function formatTime(time) {
+      var hours = Math.floor(time / 3600);
+      var minutes = Math.floor((time % 3600) / 60);
+      var seconds = Math.floor(time % 60);
+      return (
+        ("0" + hours).slice(-2) +
+        ":" +
+        ("0" + minutes).slice(-2) +
+        ":" +
+        ("0" + seconds).slice(-2)
+      );
+    }
+
+    // Create a secure WebSocket connection
+    const socket = new WebSocket("wss://845f97d157aa421780d7cfc8f7cc66d4.s2.eu.hivemq.cloud:8884");
+    socket.onopen = function () {
+      console.log("WebSocket connection established.");
+      // Send authentication credentials
+      socket.send(JSON.stringify({ username: "admin", password: "password" }));
+    };
+
+    // Initialize the map
+    var map = L.map("map").setView([0, 0], 2);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      id: "map-dark",
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    // Function to create a device marker with pop-up
+    function createMarker(device) {
+      var marker = L.marker([device.lat, device.lng]).addTo(map);
+      var popupContent = `
+        <b>Device Name:</b> ${device.name}<br>
+        <b>Last Seen:</b> ${device.lastSeen}<br>
+        <b>Time Since Last Seen:</b> ${formatTime(device.timeSinceLastSeen)}<br>
+        <b>Speed:</b> ${device.speed} km/h<br>
+        <b>Heading:</b> ${device.heading}°<br>
+      `;
+      marker.bindPopup(popupContent);
+    }
+
+    // Event listener for WebSocket messages
+    socket.onmessage = function (event) {
+      var device = JSON.parse(event.data);
+      createMarker(device);
+    };
+  </script>
+</body>
+</html>
