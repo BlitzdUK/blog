@@ -7,7 +7,7 @@
   <script>
 // Function to send data to Google Form
 async function submitToGoogleForm(formData) {
-  const url = 'YOUR_GOOGLE_FORM_URL'; // Replace with your Google Form URL
+  const url = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSckfmfyrG2fSGE97iaAx9CW9pUdoST-tDaWEnDQL1xUG43HBQ/formResponse'; // Replace with your Google Form URL
   const response = await fetch(url, {
     method: 'POST',
     body: new URLSearchParams(formData),
