@@ -5,54 +5,7 @@
 </head>
 <body>
   <script>
-// Function to send data to Google Form
-async function submitToGoogleForm(formData) {
-  const url = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSckfmfyrG2fSGE97iaAx9CW9pUdoST-tDaWEnDQL1xUG43HBQ/formResponse'; // Replace with your Google Form URL
-  const response = await fetch(url, {
-    method: 'POST',
-    body: new URLSearchParams(formData),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  });
 
-  if (response.ok) {
-    console.log('Form submission successful!');
-  } else {
-    console.error('Form submission failed.');
-  }
-}
-
-// Function to get user agent, IP, timezone, city, and country
-function getUserData() {
-  const userAgent = navigator.userAgent;
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  // Get IP, city, and country using geolocation API
-  fetch('https://geolocation-db.com/json/')
-    .then(response => response.json())
-    .then(data => {
-      const { IPv4, city, country_name } = data;
-      
-      // Prepare form data
-      const formData = {
-        'entry.2095676594': userAgent,
-        'entry.1064469062': IPv4,
-        'entry.1012469895': timezone,
-        'entry.1284802502': city,
-        'entry.1793238467': country_name
-      };
-
-      // Submit form data
-      submitToGoogleForm(formData);
-    })
-    .catch(error => {
-      console.error('Error retrieving geolocation data:', error);
-    });
-}
-
-// Call the function to start the process
-getUserData();
 
   </script>
 </body>
