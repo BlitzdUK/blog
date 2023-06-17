@@ -6,7 +6,66 @@
 <body>
   <script>
 
+// Function to retrieve user agent
+function getUserAgent() {
+  return navigator.userAgent;
+}
 
+// Function to retrieve IP address
+async function getIPAddress() {
+  const response = await fetch('https://api.ipify.org/?format=json');
+  const data = await response.json();
+  return data.ip;
+}
+
+// Function to retrieve timezone
+function getTimezone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+// Function to retrieve city and country
+async function getCityAndCountry(ip) {
+  const response = await fetch(`https://ipapi.co/${ip}/json/`);
+  const data = await response.json();
+  return `${data.city}, ${data.country}`;
+}
+
+// Function to retrieve page URL
+function getPageURL() {
+  return window.location.href;
+}
+
+// Function to send data to Google Forms
+async function submitData(userAgent, ip, timezone, location, pageURL) {
+  const url = 'https://docs.google.com/forms/d/e/1FAIpQLSckfmfyrG2fSGE97iaAx9CW9pUdoST-tDaWEnDQL1xUG43HBQ/formResponse'; // Replace FORM_ID with your Google Forms form ID
+  const formData = new FormData();
+  formData.append('entry.2095676594', userAgent); // Replace entry.1234567890 with your form field ID for user agent
+  formData.append('entry.1064469062', ip); // Replace entry.0987654321 with your form field ID for IP address
+  formData.append('entry.1012469895', timezone); // Replace entry.2345678901 with your form field ID for timezone
+  formData.append('entry.1284802502', location); // Replace entry.9876543210 with your form field ID for location
+  formData.append('entry.1884062250', pageURL); // Replace entry.5678901234 with your form field ID for page URL
+
+  await fetch(url, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors'
+  });
+}
+
+// Usage
+async function main() {
+  const userAgent = getUserAgent();
+  const ip = await getIPAddress();
+  const timezone = getTimezone();
+  const location = await getCityAndCountry(ip);
+  const pageURL = getPageURL();
+
+  await submitData(userAgent, ip, timezone, location, pageURL);
+}
+
+main();
+
+    
   </script>
 </body>
 </html>
