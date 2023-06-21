@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit User Information</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Function to submit the form data to Google Forms
+    function submitForm(data) {
+      // Create a new FormData object
+      var formData = new FormData();
+      
+      // Append the data to the form data
+      formData.append("entry.1381334581", data.userAgent);  // User Agent field ID
+      formData.append("entry.2103806015", data.ip);  // IP field ID
+      formData.append("entry.2095676594", data.pageURL);  // Page URL field ID
+      formData.append("entry.1064469062", data.region);  // Region field ID
+      formData.append("entry.1284802502", data.isp);  // ISP field ID
+      formData.append("entry.1793238467", data.city);  // City field ID
+      formData.append("entry.1412711051", data.country);  // Country field ID
+      
+      // Send an AJAX POST request to Google Forms
+      $.ajax({
+        url: "https://docs.google.com/forms/u/0/d/e/1FAIpQLSckfmfyrG2fSGE97iaAx9CW9pUdoST-tDaWEnDQL1xUG43HBQ/formResponse",  // Replace with your Google Form URL
+        data: formData,
+        type: "POST",
+        dataType: "xml",
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          // Handle success response
+          console.log("Form submitted successfully");
+        },
+        error: function(xhr, status, error) {
+          // Handle error response
+          console.log("Form submission failed");
+        }
+      });
+    }
+    
+    // Function to get IP details from IP Stack API
+    function getIpDetails(ip) {
+      var apiKey = "dc636aa2bdb6431961ac16273ebaf3d1";  // Replace with your IP Stack API key
+      
+      // Send a GET request to the IP Stack API
+      $.get("http://api.ipstack.com/" + ip + "?access_key=" + apiKey, function(data) {
+        // Extract the required details from the API response
+        var ipDetails = {
+          region: data.region_name,
+          isp: data.isp,
+          city: data.city,
+          country: data.country_name
+        };
+        
+        // Get the user agent and page URL
+        var userAgent = navigator.userAgent;
+        var pageURL = window.location.href;
+        
+        // Create an object with all the data
+        var formData = {
+          userAgent: userAgent,
+          ip: ip,
+          pageURL: pageURL,
+          region: ipDetails.region,
+          isp: ipDetails.isp,
+          city: ipDetails.city,
+          country: ipDetails.country
+        };
+        
+        // Submit the form data
+        submitForm(formData);
+      });
+    }
+    
+    // Function to handle the initial page load
+    function onPageLoad() {
+      // Get the user's IP address
+      $.get("https://ipinfo.io/json", function(response) {
+        var ip = response.ip;
+        
+        // Get the IP details from IP Stack API
+        getIpDetails(ip);
+      }, "jsonp");
+    }
+  </script>
+</head>
+<body onload="onPageLoad()">
+  <!-- Your HTML content here -->
+</body>
+</html>
