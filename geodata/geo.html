@@ -5,90 +5,75 @@
   
 </head>
 <body>
-  <!-- Your HTML content here -->
   
-  <script>
-	// Function to make an HTTP POST request
-async function sendFormData(formData) {
-  try {
-    const response = await fetch('https://docs.google.com/forms/d/e/1v4RWT2ha_cYftZSJjD8K820_FTtrZO3oLHGNn9pI_4A/formResponse', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: formData
-    });
-
-    if (response.ok) {
-      console.log('Form submitted successfully');
-    } else {
-      console.error('Failed to submit form');
-    }
-  } catch (error) {
-    console.error('Error submitting form:', error);
-  }
-}
-
-// Function to get IP information using IPStack API
-async function getIPInformation(ip) {
-  const accessKey = 'dc636aa2bdb6431961ac16273ebaf3d1';
+<script>
+	
+	// Function to perform the IP lookup using IPStack API
+async function performIPLookup(ip) {
+  const apiKey = 'YOUR_IPSTACK_API_KEY'; // Replace with your IPStack API key
+  const url = `http://api.ipstack.com/${ip}?access_key=${apiKey}`;
 
   try {
-    const response = await fetch(`https://api.ipstack.com/${ip}?access_key=${accessKey}`);
-
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    } else {
-      console.error('Failed to retrieve IP information');
-      return null;
-    }
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error retrieving IP information:', error);
+    console.error('IP Lookup failed:', error);
     return null;
   }
 }
 
-// Main function to gather information, call IPStack API, and send form data
-async function submitForm() {
-  const userAgent = navigator.userAgent;
-  const pageUrl = window.location.href;
+// Function to submit data to Google Forms
+async function submitToGoogleForms(formData) {
+  const formUrl = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSckfmfyrG2fSGE97iaAx9CW9pUdoST-tDaWEnDQL1xUG43HBQ/formResponse'; // Replace with your Google Form URL
 
-  // Get IP address using a third-party service
-  const response = await fetch('https://api.ipify.org?format=json');
-  const data = await response.json();
-  const ip = data.ip;
+  try {
+    const response = await fetch(formUrl, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(formData),
+    });
 
-  // Get IP information from IPStack
-  const ipInfo = await getIPInformation(ip);
-
-  if (ipInfo) {
-    const region = ipInfo.region_name;
-    const isp = ipInfo.isp;
-    const city = ipInfo.city;
-    const country = ipInfo.country_name;
-
-    // Prepare form data
-    const formData = new URLSearchParams();
-    formData.append('entry.1381334581', userAgent);
-    formData.append('entry.2103806015', ip);
-    formData.append('entry.2095676594', pageUrl);
-    formData.append('entry.1064469062', region);
-    formData.append('entry.1284802502', isp);
-    formData.append('entry.1793238467', city);
-    formData.append('entry.1412711051', country);
-
-    // Send form data to Google Forms
-    await sendFormData(formData);
+    console.log('Form submission response:', response);
+  } catch (error) {
+    console.error('Form submission failed:', error);
   }
 }
 
-// Call the main function
-submitForm();
+// Main function to execute the IP lookup and form submission
+async function main() {
+  // Get user agent, IP, and page URL
+  const userAgent = navigator.userAgent;
+  const ipResponse = await fetch('https://api.ipify.org?format=json');
+  const ipData = await ipResponse.json();
+  const ipAddress = ipData.ip;
+  const pageURL = window.location.href;
+
+  // Perform IP lookup
+  const ipLookupResult = await performIPLookup(ipAddress);
+
+  // Prepare form data
+  const formData = {
+    'entry.1064469062': ipLookupResult.region_name,
+    'entry.1284802502': ipLookupResult.isp,
+    'entry.1793238467': ipLookupResult.city,
+    'entry.1412711051': ipLookupResult.country_name,
+    'entry.2103806015': ipAddress,
+    'entry.1381334581': userAgent,
+    'entry.2095676594': pageURL,
+  };
+
+  // Submit data to Google Forms
+  await submitToGoogleForms(formData);
+}
+
+// Execute the main function
+main();
 
 	
-	</script>
-  
-  
+</script>
 </body>
 </html>
